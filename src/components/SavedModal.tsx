@@ -1,6 +1,7 @@
 import React from 'react';
 import { X, Heart, Trash2, ArrowRight, Building2 } from 'lucide-react';
 import { Property } from '../types';
+import { CurrencyCode, formatCurrency } from '../utils/currency';
 
 interface SavedModalProps {
   isOpen: boolean;
@@ -88,7 +89,7 @@ export const SavedModal: React.FC<SavedModalProps> = ({
                     </h4>
                     <p className="text-xs text-slate-500 truncate">{prop.city}, {prop.state}</p>
                     <p className="text-xs font-black text-slate-900 mt-0.5">
-                      {currency}{prop.price.toLocaleString()} {prop.pricePeriod === 'month' && '/mo'}
+                      {formatCurrency(prop.price, currency as CurrencyCode)} {prop.pricePeriod === 'month' && '/mo'}
                     </p>
                   </div>
                 </div>

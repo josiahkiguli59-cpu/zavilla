@@ -1,6 +1,9 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -46,6 +49,44 @@ app.get('/api/properties', (_req, res) => {
       },
     ],
   });
+});
+
+app.get('/api/exchange-rates', async (_req, res) => {
+  const apiKey = process.env.EXCHANGERATE_API_KEY;
+
+  if (!apiKey) {
+    return res.status(503).json({
+      error: 'ExchangeRate API is not configured. Set EXCHANGERATE_API_KEY on the server.',
+    });
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 8000);
+
+  try {
+    const response = await fetch(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`, {
+      signal: controller.signal,
+    });
+    const data = await response.json();
+
+    if (!response.ok || data.result !== 'success') {
+      return res.status(502).json({ error: 'ExchangeRate API request failed.' });
+    }
+
+    return res.json({
+      base: 'USD',
+      rates: {
+        '$': 1,
+        '€': data.conversion_rates.EUR,
+        '£': data.conversion_rates.GBP,
+      },
+      updatedAt: data.time_last_update_utc,
+    });
+  } catch {
+    return res.status(502).json({ error: 'Unable to reach ExchangeRate API.' });
+  } finally {
+    clearTimeout(timeout);
+  }
 });
 
 if (ASSET_BASE) {

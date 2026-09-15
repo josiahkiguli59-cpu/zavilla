@@ -16,6 +16,7 @@ import {
   Mail
 } from 'lucide-react';
 import { Property } from '../types';
+import { CurrencyCode, formatCompactCurrency, formatCurrency } from '../utils/currency';
 
 interface SecondaryViewsProps {
   currentTab: string;
@@ -164,7 +165,7 @@ export const SecondaryViews: React.FC<SecondaryViewsProps> = ({
           <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
             <span className="text-xs font-semibold text-slate-400 uppercase">Avg Sale Price / Sq Ft</span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-slate-900">{currency}1,480</span>
+              <span className="text-2xl font-black text-slate-900">{formatCurrency(1480, currency as CurrencyCode)}</span>
               <span className="text-xs font-bold text-emerald-600 flex items-center">+6.8% YoY</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-2">Corridor: Malibu, Aspen & South Florida</p>
@@ -182,7 +183,7 @@ export const SecondaryViews: React.FC<SecondaryViewsProps> = ({
           <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs">
             <span className="text-xs font-semibold text-slate-400 uppercase">Total Managed Asset Value</span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl font-black text-slate-900">{currency}42.8M</span>
+              <span className="text-2xl font-black text-slate-900">{formatCompactCurrency(42_800_000, currency as CurrencyCode)}</span>
               <span className="text-xs font-bold text-emerald-600">+14.2%</span>
             </div>
             <p className="text-[11px] text-slate-500 mt-2">Across 8 active exclusive representations</p>
@@ -213,11 +214,11 @@ export const SecondaryViews: React.FC<SecondaryViewsProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
             <div>
               <span className="text-slate-400">Agreed Lease Amount</span>
-              <p className="font-bold text-slate-900 text-sm">{currency}12,400 / mo</p>
+              <p className="font-bold text-slate-900 text-sm">{formatCurrency(12400, currency as CurrencyCode)} / mo</p>
             </div>
             <div>
               <span className="text-slate-400">Security Deposit Escrow</span>
-              <p className="font-bold text-slate-900 text-sm">{currency}37,200 Held</p>
+              <p className="font-bold text-slate-900 text-sm">{formatCurrency(37200, currency as CurrencyCode)} Held</p>
             </div>
             <div>
               <span className="text-slate-400">Inspection Status</span>
@@ -225,7 +226,7 @@ export const SecondaryViews: React.FC<SecondaryViewsProps> = ({
             </div>
             <div>
               <span className="text-slate-400">Brokerage Advisory Yield</span>
-              <p className="font-bold text-slate-900 text-sm">{currency}14,880</p>
+              <p className="font-bold text-slate-900 text-sm">{formatCurrency(14880, currency as CurrencyCode)}</p>
             </div>
           </div>
         </div>

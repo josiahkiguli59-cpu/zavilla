@@ -11,6 +11,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { Property } from '../types';
+import { CurrencyCode, formatCurrency } from '../utils/currency';
 
 interface PropertyRowProps {
   property: Property;
@@ -29,6 +30,8 @@ export const PropertyRow: React.FC<PropertyRowProps> = ({
   onSelectProperty,
   onOpenTourModal
 }) => {
+  const formattedPrice = formatCurrency(property.price, currency as CurrencyCode);
+
   const getStatusBadge = (status: Property['status']) => {
     switch (status) {
       case 'Available':
@@ -126,7 +129,7 @@ export const PropertyRow: React.FC<PropertyRowProps> = ({
         <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider md:hidden">Price:</span>
         <div>
           <span className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
-            {currency}{property.price.toLocaleString()}
+            {formattedPrice}
           </span>
           {property.pricePeriod === 'month' && (
             <span className="text-xs text-slate-500 font-medium ml-1">/mo</span>

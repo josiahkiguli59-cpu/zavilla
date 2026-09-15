@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { FilterState, ListingType } from '../types';
 import { PROPERTY_TYPES, AMENITY_OPTIONS } from '../data/propertiesData';
+import { CurrencyCode, formatCompactCurrency } from '../utils/currency';
 
 interface FilterBarProps {
   filters: FilterState;
@@ -204,7 +205,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <div className="flex justify-between items-center text-xs font-semibold">
               <span className="text-slate-700">Max Budget</span>
               <span className="text-blue-600 font-bold">
-                {currency}{filters.maxPrice >= 1000000 ? `${(filters.maxPrice / 1000000).toFixed(1)}M` : `${(filters.maxPrice / 1000).toFixed(0)}k`}
+                {formatCompactCurrency(filters.maxPrice, currency as CurrencyCode)}
               </span>
             </div>
             <input
@@ -218,8 +219,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               className="w-full accent-blue-600 cursor-pointer h-2 bg-slate-200 rounded-lg"
             />
             <div className="flex justify-between text-[11px] text-slate-400 font-medium">
-              <span>{currency}10k</span>
-              <span>{currency}10M+</span>
+              <span>{formatCompactCurrency(10000, currency as CurrencyCode)}</span>
+              <span>{formatCompactCurrency(10000000, currency as CurrencyCode)}+</span>
             </div>
           </div>
 

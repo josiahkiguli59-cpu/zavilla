@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { FilterBar } from './components/FilterBar';
@@ -17,14 +17,63 @@ import { SavedModal } from './components/SavedModal';
 import { SecondaryViews } from './components/SecondaryViews';
 import { INITIAL_PROPERTIES } from './data/propertiesData';
 import { Property, FilterState } from './types';
+import { CurrencyCode, getStoredCurrency, setExchangeRates, setStoredCurrency } from './utils/currency';
 import { Home, Sparkles, AlertCircle, CheckCircle2 } from 'lucide-react';
+
+const SAVED_PROPERTIES_STORAGE_KEY = 'zavilla-saved-ids';
 
 export default function App() {
   const [properties, setProperties] = useState<Property[]>(INITIAL_PROPERTIES);
-  const [currency, setCurrency] = useState<'$' | '€' | '£'>('$');
-  const [savedIds, setSavedIds] = useState<string[]>(['prop-1', 'prop-4']);
+  const [currency, setCurrency] = useState<CurrencyCode>(() => getStoredCurrency());
+  const [, setRatesVersion] = useState(0);
+  const [savedIds, setSavedIds] = useState<string[]>(() => {
+    if (typeof window === 'undefined') {
+      return [];
+    }
+
+    try {
+      const saved = window.localStorage.getItem(SAVED_PROPERTIES_STORAGE_KEY);
+      const parsed = saved ? JSON.parse(saved) : [];
+      return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === 'string') : [];
+    } catch {
+      return [];
+    }
+  });
   const [currentTab, setCurrentTab] = useState<string>('properties');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setStoredCurrency(currency);
+  }, [currency]);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    fetch('/api/exchange-rates')
+      .then((response) => {
+        if (!response.ok) throw new Error('Exchange rates unavailable');
+        return response.json() as Promise<{ rates?: Partial<Record<CurrencyCode, number>> }>;
+      })
+      .then((data) => {
+        if (isMounted && data.rates) {
+          setExchangeRates(data.rates);
+          setRatesVersion((version) => version + 1);
+        }
+      })
+      .catch(() => {
+        // The currency utility keeps fallback rates when the backend is unavailable.
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem(SAVED_PROPERTIES_STORAGE_KEY, JSON.stringify(savedIds));
+    }
+  }, [savedIds]);
 
   // Modals state
   const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);

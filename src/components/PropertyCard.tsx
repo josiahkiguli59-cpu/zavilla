@@ -11,6 +11,7 @@ import {
   Car
 } from 'lucide-react';
 import { Property } from '../types';
+import { CurrencyCode, formatCurrency } from '../utils/currency';
 
 interface PropertyCardProps {
   property: Property;
@@ -29,10 +30,6 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
   onSelectProperty,
   onOpenTourModal
 }) => {
-  const formatPrice = (price: number) => {
-    return price.toLocaleString();
-  };
-
   const getStatusBadge = (status: Property['status']) => {
     switch (status) {
       case 'Available':
@@ -50,6 +47,8 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         return 'bg-slate-700 text-white';
     }
   };
+
+  const formattedPrice = formatCurrency(property.price, currency as CurrencyCode);
 
   return (
     <div 
@@ -98,7 +97,7 @@ export const PropertyCard: React.FC<PropertyCardProps> = ({
         <div className="absolute bottom-3 left-3 right-3 flex items-baseline justify-between text-white">
           <div>
             <span className="text-xl sm:text-2xl font-black tracking-tight drop-shadow-xs">
-              {currency}{formatPrice(property.price)}
+              {formattedPrice}
             </span>
             {property.pricePeriod === 'month' && (
               <span className="text-xs font-medium text-slate-200 ml-1">/ month</span>

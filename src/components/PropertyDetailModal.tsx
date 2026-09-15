@@ -22,6 +22,7 @@ import {
   DollarSign
 } from 'lucide-react';
 import { Property } from '../types';
+import { CurrencyCode, formatCurrency } from '../utils/currency';
 
 interface PropertyDetailModalProps {
   property: Property | null;
@@ -59,6 +60,9 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
     property.monthlyExpenses.hoa + 
     property.monthlyExpenses.homeInsurance + 
     property.monthlyExpenses.utilitiesEst;
+
+  const formattedPrice = formatCurrency(property.price, currency as CurrencyCode);
+  const formattedMonthlyTotal = formatCurrency(totalMonthlyEst, currency as CurrencyCode);
 
   return (
     <div 
@@ -171,7 +175,7 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
 
             <div className="text-left sm:text-right shrink-0">
               <span className="text-3xl sm:text-4xl font-black text-blue-600 tracking-tight">
-                {currency}{property.price.toLocaleString()}
+                {formattedPrice}
               </span>
               {property.pricePeriod === 'month' && (
                 <span className="text-sm font-semibold text-slate-500 ml-1">/ month</span>
@@ -316,24 +320,24 @@ export const PropertyDetailModal: React.FC<PropertyDetailModalProps> = ({
               <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200/70">
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-xs font-bold text-slate-500 uppercase">Estimated Monthly Carrying Cost</span>
-                  <span className="text-base font-black text-slate-900">{currency}{totalMonthlyEst.toLocaleString()} / mo</span>
+                  <span className="text-base font-black text-slate-900">{formattedMonthlyTotal} / mo</span>
                 </div>
                 <div className="space-y-2.5 text-xs">
                   <div className="flex justify-between py-1.5 border-b border-slate-200">
                     <span className="text-slate-600">Property Tax Assessment (Annualized)</span>
-                    <span className="font-bold text-slate-800">{currency}{property.monthlyExpenses.propertyTax.toLocaleString()} / mo</span>
+                    <span className="font-bold text-slate-800">{formatCurrency(property.monthlyExpenses.propertyTax, currency as CurrencyCode)} / mo</span>
                   </div>
                   <div className="flex justify-between py-1.5 border-b border-slate-200">
                     <span className="text-slate-600">HOA & Community Gated Maintenance</span>
-                    <span className="font-bold text-slate-800">{currency}{property.monthlyExpenses.hoa.toLocaleString()} / mo</span>
+                    <span className="font-bold text-slate-800">{formatCurrency(property.monthlyExpenses.hoa, currency as CurrencyCode)} / mo</span>
                   </div>
                   <div className="flex justify-between py-1.5 border-b border-slate-200">
                     <span className="text-slate-600">Hazard & Umbrella Property Insurance</span>
-                    <span className="font-bold text-slate-800">{currency}{property.monthlyExpenses.homeInsurance.toLocaleString()} / mo</span>
+                    <span className="font-bold text-slate-800">{formatCurrency(property.monthlyExpenses.homeInsurance, currency as CurrencyCode)} / mo</span>
                   </div>
                   <div className="flex justify-between py-1.5">
                     <span className="text-slate-600">Estimated Smart Climate Utilities</span>
-                    <span className="font-bold text-slate-800">{currency}{property.monthlyExpenses.utilitiesEst.toLocaleString()} / mo</span>
+                    <span className="font-bold text-slate-800">{formatCurrency(property.monthlyExpenses.utilitiesEst, currency as CurrencyCode)} / mo</span>
                   </div>
                 </div>
               </div>

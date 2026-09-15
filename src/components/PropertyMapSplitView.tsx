@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Property } from '../types';
 import { PropertyCard } from './PropertyCard';
+import { CurrencyCode, formatCompactCurrency } from '../utils/currency';
 
 interface PropertyMapSplitViewProps {
   properties: Property[];
@@ -109,12 +110,7 @@ export const PropertyMapSplitView: React.FC<PropertyMapSplitViewProps> = ({
                       : 'bg-white/95 text-slate-900 hover:bg-white hover:text-blue-600'
                   }`}
                 >
-                  <span>{currency}</span>
-                  <span>
-                    {prop.price >= 1000000 
-                      ? `${(prop.price / 1000000).toFixed(1)}M` 
-                      : `${(prop.price / 1000).toFixed(0)}k`}
-                  </span>
+                  <span>{formatCompactCurrency(prop.price, currency as CurrencyCode)}</span>
                   {prop.pricePeriod === 'month' && <span className="text-[10px] opacity-80">/mo</span>}
                 </div>
 
@@ -210,7 +206,7 @@ export const PropertyMapSplitView: React.FC<PropertyMapSplitViewProps> = ({
                   </div>
                   <div className="text-right shrink-0">
                     <p className="text-xs font-black text-blue-600">
-                      {currency}{p.price.toLocaleString()}
+                      {formatCompactCurrency(p.price, currency as CurrencyCode)}
                     </p>
                     <p className="text-[10px] text-slate-400 font-medium">{p.beds}b • {p.baths}ba</p>
                   </div>
