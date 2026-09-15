@@ -52,7 +52,7 @@ export const formatCurrency = (usdAmount: number, currency: CurrencyCode) => {
 
 export const formatCompactCurrency = (usdAmount: number, currency: CurrencyCode) => {
   const converted = convertPrice(usdAmount, currency);
-  const rounded = Math.round(converted);
+  const rounded = Math.round(converted / 1_000) * 1_000;
 
   if (rounded >= 1_000_000) {
     return `${currency}${(rounded / 1_000_000).toFixed(1)}M`;
@@ -62,5 +62,5 @@ export const formatCompactCurrency = (usdAmount: number, currency: CurrencyCode)
     return `${currency}${(rounded / 1_000).toFixed(0)}k`;
   }
 
-  return `${currency}${rounded.toLocaleString()}`;
+  return `${currency}${Math.round(converted).toLocaleString()}`;
 };
