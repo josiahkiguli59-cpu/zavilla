@@ -1,0 +1,6 @@
+{
+  "name": "ZAVILLA - Real Estate Property Listing Dashboard",
+  "description": "Luxury real estate property listing and portfolio management dashboard for ZAVILLA, featuring intuitive list and grid views, advanced filtering, interactive map tracking, and comprehensive property insights.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
