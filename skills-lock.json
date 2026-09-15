@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "note": "Single-source dependency risk: all entries currently resolve to Leonxlnx/taste-skill. This repository depends on one upstream source, so future maintainers should watch for upstream breakage or migrations.",
   "skills": {
     "brandkit": {
       "source": "Leonxlnx/taste-skill",
